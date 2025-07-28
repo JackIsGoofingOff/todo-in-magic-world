@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Magic Quest | Mobile Task RPG</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* style.css */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #0a192f;
+            --secondary: #112240;
+            --accent: #64ffda;
+            --light: #e6f1ff;
+            --dark: #020c1b;
+            --blue-light: #233554;
+            --blue-accent: #3792ff;
+            --magic-purple: #9d4edd;
+            --sports: #4CAF50;
+            --reading: #2196F3;
+            --gaming: #9C27B0;
+            --cooking: #FF9800;
+            --learning: #FF5722;
+            --error: #ff5555;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--primary) 100%);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 100%;
+            background: rgba(10, 25, 47, 0.95);
+            border: 1px solid var(--blue-light);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(2, 12, 27, 0.7);
+            display: flex;
+            flex-direction: column;
+            border-radius: 0;
+        }
+        
+        header {
+            padding: 20px;
+            text-align: center;
+            background: var(--primary);
+            border-bottom: 1px solid var(--blue-light);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, transparent 49%, rgba(86, 171, 255, 0.05) 50%, transparent 51%),
+                linear-gradient(-45deg, transparent 49%, rgba(86, 171, 255, 0.05) 50%, transparent 51%);
+            background-size: 20px 20px;
+            opacity: 0.3;
+            z-index: 0;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            color: var(--accent);
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(100, 255, 218, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 15px;
+            color: var(--blue-accent);
+        }
+        
+        .user-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .stat-card {
+            background: var(--secondary);
+            padding: 15px;
+            border: 1px solid var(--blue-light);
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+        
+        .stat-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            color: var(--accent);
+        }
+        
+        .stat-card p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: var(--blue-light);
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+        
+        .tasks-section {
+            padding: 20px 15px;
+            border-bottom: 1px solid var(--blue-light);
+            position: relative;
+        }
+        
+        .collection-section {
+            padding: 20px 15px;
+            border-bottom: 1px solid var(--blue-light);
+        }
+        
+        .ai-section {
+            padding: 20px 15px;
+            background: var(--primary);
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            padding-bottom: 8px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--accent);
+        }
+        
+        .section-title i {
+            color: var(--accent);
+            font-size: 1rem;
+        }
+        
+        .task-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .task-input {
+            flex: 1;
+            padding: 14px 16px;
+            border: 1px solid var(--blue-light);
+            background: var(--secondary);
+            color: var(--light);
+            font-size: 0.9rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .task-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(100, 255, 218, 0.2);
+        }
+        
+        .task-input::placeholder {
+            color: rgba(230, 241, 255, 0.4);
+        }
+        
+        .add-btn {
+            background: var(--secondary);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 0 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-width: 100px;
+        }
+        
+        .add-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: var(--accent);
+            transition: height 0.3s ease;
+            z-index: -1;
+        }
+        
+        .add-btn:hover {
+            color: var(--primary);
+        }
+        
+        .add-btn:hover::before {
+            height: 100%;
+        }
+        
+        .error-message {
+            color: var(--error);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .task-list {
+            list-style: none;
+        }
+        
+        .task-item {
+            background: var(--secondary);
+            border: 1px solid var(--blue-light);
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            animation: slideIn 0.5s forwards;
+            opacity: 0;
+            transform: translateX(20px);
+        }
+        
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .task-item.removing {
+            animation: removeTask 0.8s ease forwards;
+        }
+        
+        @keyframes removeTask {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(0); opacity: 0; height: 0; padding: 0; margin: 0; border: none; }
+        }
+        
+        .task-checkbox {
+            margin-right: 15px;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--blue-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .task-checkbox::before {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 0;
+            background: var(--accent);
+            transition: all 0.3s ease;
+        }
+        
+        .task-checkbox.checked {
+            border-color: var(--accent);
+        }
+        
+        .task-checkbox.checked::before {
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            box-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+        }
+        
+        .task-checkbox.checked::after {
+            content: '';
+            position: absolute;
+            width: 5px;
+            height: 8px;
+            border: solid var(--primary);
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            margin-top: -1px;
+        }
+        
+        .task-text {
+            flex: 1;
+            position: relative;
+            font-size: 0.9rem;
+        }
+        
+        .category-tag {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+        
+        .tag-sports { background: rgba(76, 175, 80, 0.2); color: var(--sports); border: 1px solid var(--sports); }
+        .tag-reading { background: rgba(33, 150, 243, 0.2); color: var(--reading); border: 1px solid var(--reading); }
+        .tag-gaming { background: rgba(156, 39, 176, 0.2); color: var(--gaming); border: 1px solid var(--gaming); }
+        .tag-cooking { background: rgba(255, 152, 0, 0.2); color: var(--cooking); border: 1px solid var(--cooking); }
+        .tag-learning { background: rgba(255, 87, 34, 0.2); color: var(--learning); border: 1px solid var(--learning); }
+        
+        .magic-reward {
+            background: rgba(55, 146, 255, 0.1);
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            margin-left: 8px;
+            border: 1px solid var(--blue-accent);
+            color: var(--blue-accent);
+            transition: all 0.3s ease;
+        }
+        
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .collection-item {
+            background: var(--secondary);
+            border: 1px solid var(--blue-light);
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .collection-item.locked {
+            opacity: 0.5;
+        }
+        
+        .collection-item.unlocked {
+            border-color: var(--accent);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .collection-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--magic-purple);
+        }
+        
+        .collection-name {
+            font-size: 0.9rem;
+            margin-bottom: 3px;
+            font-weight: 600;
+        }
+        
+        .collection-level {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            color: var(--blue-accent);
+        }
+        
+        .collection-description {
+            font-size: 0.7rem;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+        
+        .locked-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 12, 27, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: var(--blue-accent);
+        }
+        
+        .ai-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .ai-controls {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .hobby-tag {
+            background: var(--secondary);
+            border: 1px solid var(--blue-light);
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 0.8rem;
+            flex: 1;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .hobby-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            background: var(--accent);
+            transition: height 0.3s ease;
+            z-index: -1;
+        }
+        
+        .hobby-tag:hover, .hobby-tag.active {
+            color: var(--primary);
+            border-color: var(--accent);
+        }
+        
+        .hobby-tag:hover::before, .hobby-tag.active::before {
+            height: 100%;
+        }
+        
+        .generate-btn {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 14px 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(100, 255, 218, 0.2), transparent);
+            transition: left 0.8s ease;
+        }
+        
+        .generate-btn:hover::before {
+            left: 100%;
+        }
+        
+        .generate-btn:hover {
+            background: rgba(100, 255, 218, 0.1);
+        }
+        
+        .ai-task {
+            background: var(--secondary);
+            border: 1px solid var(--blue-light);
+            padding: 18px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            animation: fadeIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ai-task::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--accent);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .add-ai-task {
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+        
+        .add-ai-task:hover {
+            background: var(--accent);
+            color: var(--primary);
+        }
+        
+        .particle {
+            position: absolute;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleMove 1.2s ease-out forwards;
+            box-shadow: 0 0 10px var(--accent);
+        }
+        
+        @keyframes particleMove {
+            to {
+                transform: translate(var(--tx), var(--ty));
+                opacity: 0;
+            }
+        }
+        
+        .hexagon-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(45deg, transparent 49%, rgba(86, 171, 255, 0.05) 50%, transparent 51%),
+                linear-gradient(-45deg, transparent 49%, rgba(86, 171, 255, 0.05) 50%, transparent 51%);
+            background-size: 30px 30px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            left: 15px;
+            padding: 12px 20px;
+            background: var(--secondary);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            z-index: 1000;
+            transform: translateY(-100px);
+            transition: transform 0.5s ease;
+            border-radius: 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        .notification.show {
+            transform: translateY(0);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 30px 15px;
+            color: var(--blue-accent);
+        }
+        
+        .empty-state i {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            color: var(--accent);
+        }
+        
+        .empty-state p {
+            font-size: 0.95rem;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        /* Tablet and Desktop Styles */
+        @media (min-width: 768px) {
+            body {
+                padding: 20px;
+            }
+            
+            .container {
+                max-width: 700px;
+            }
+            
+            header {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 2.3rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .user-stats {
+                flex-direction: row;
+                gap: 15px;
+            }
+            
+            .stat-card {
+                min-width: 150px;
+                padding: 18px;
+            }
+            
+            .tasks-section, 
+            .collection-section, 
+            .ai-section {
+                padding: 25px;
+            }
+            
+            .task-form {
+                flex-direction: row;
+            }
+            
+            .input-group {
+                flex: 1;
+            }
+            
+            .task-input {
+                font-size: 1rem;
+            }
+            
+            .add-btn {
+                padding: 0 25px;
+            }
+            
+            .collection-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px;
+            }
+            
+            .ai-controls {
+                gap: 10px;
+            }
+            
+            .hobby-tag {
+                padding: 12px 20px;
+                font-size: 0.9rem;
+                flex: none;
+            }
+            
+            .generate-btn {
+                max-width: 300px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            
+            .ai-task {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .container {
+                max-width: 900px;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto 1fr auto;
+                grid-template-areas:
+                    "header header"
+                    "tasks collection"
+                    "ai ai";
+                display: grid;
+            }
+            
+            .tasks-section {
+                border-right: 1px solid var(--blue-light);
+                border-bottom: none;
+            }
+            
+            .collection-section {
+                border-bottom: none;
+            }
+            
+            .ai-section {
+                grid-column: span 2;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hexagon-grid"></div>
+        
+        <header>
+            <div class="header-bg"></div>
+            <div class="header-content">
+                <h1>MAGIC QUEST</h1>
+                <p class="subtitle">Transform daily activities into magical achievements</p>
+                <div class="user-stats">
+                    <div class="stat-card">
+                        <h3 id="level">1</h3>
+                        <p>ADVENTURE LEVEL</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="level-progress"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="magic-points">0</h3>
+                        <p>MAGIC POINTS</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="items-count">0</h3>
+                        <p>ARTIFACTS UNLOCKED</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <section class="tasks-section">
+            <h2 class="section-title"><i class="fas fa-scroll"></i> Daily Quests</h2>
+            <div class="task-form">
+                <div class="input-group">
+                    <input type="text" class="task-input" id="task-input" placeholder="Add a new quest...">
+                    <button class="add-btn" id="add-btn">ADD</button>
+                </div>
+                <div class="error-message" id="error-message">Please enter a quest before adding</div>
+            </div>
+            <ul class="task-list" id="task-list">
+                <div class="empty-state">
+                    <i class="fas fa-hat-wizard"></i>
+                    <h3>Your Quest Log is Empty</h3>
+                    <p>Add your first quest or generate one below to begin your magical journey!</p>
+                </div>
+            </ul>
+        </section>
+        
+        <section class="collection-section">
+            <h2 class="section-title"><i class="fas fa-gem"></i> Arcane Artifacts</h2>
+            <div class="collection-grid" id="collection-grid">
+                <!-- Collection items will be added here dynamically -->
+            </div>
+        </section>
+        
+        <section class="ai-section">
+            <h2 class="section-title"><i class="fas fa-wand-magic-sparkles"></i> Quest Generator</h2>
+            <div class="ai-container">
+                <p>Select your interests to get magical quest suggestions:</p>
+                <div class="ai-controls">
+                    <div class="hobby-tag active" data-hobby="sports">⚽ Sports</div>
+                    <div class="hobby-tag" data-hobby="reading">📚 Reading</div>
+                    <div class="hobby-tag" data-hobby="gaming">🎮 Gaming</div>
+                    <div class="hobby-tag" data-hobby="cooking">🍳 Cooking</div>
+                    <div class="hobby-tag" data-hobby="learning">🧠 Learning</div>
+                </div>
+                <button class="generate-btn" id="generate-task">
+                    <i class="fas fa-magic"></i> Generate Quest
+                </button>
+                <div id="ai-task-container">
+                    <!-- Generated task will appear here -->
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="notification" id="notification">
+        New artifact unlocked! Check your collection.
+    </div>
+
+    <script>
+        // script.js
+        // App State
+        const state = {
+            level: 1,
+            magicPoints: 0,
+            nextLevel: 100,
+            tasks: [],
+            collection: [
+                { id: 1, name: "Apprentice Wand", level: 1, icon: "fa-wand-magic-sparkles", unlocked: false, 
+                  description: "Complete your first quest" },
+                { id: 2, name: "Spellbook", level: 2, icon: "fa-book-sparkles", unlocked: false,
+                  description: "Reach level 2" },
+                { id: 3, name: "Mana Crystal", level: 3, icon: "fa-gem", unlocked: false,
+                  description: "Reach level 3" },
+                { id: 4, name: "Wizard Hat", level: 4, icon: "fa-hat-wizard", unlocked: false,
+                  description: "Reach level 4" },
+                { id: 5, name: "Phoenix Feather", level: 5, icon: "fa-feather", unlocked: false,
+                  description: "Reach level 5" },
+                { id: 6, name: "Dragon Egg", level: 6, icon: "fa-dragon", unlocked: false,
+                  description: "Reach level 6" }
+            ],
+            hobbies: ["sports", "reading", "gaming", "cooking", "learning"],
+            selectedHobby: "sports",
+            generatedTasks: []
+        };
+        
+        // DOM Elements
+        const taskList = document.getElementById('task-list');
+        const collectionGrid = document.getElementById('collection-grid');
+        const taskInput = document.getElementById('task-input');
+        const addBtn = document.getElementById('add-btn');
+        const generateBtn = document.getElementById('generate-task');
+        const levelElement = document.getElementById('level');
+        const magicPointsElement = document.getElementById('magic-points');
+        const itemsCountElement = document.getElementById('items-count');
+        const levelProgress = document.getElementById('level-progress');
+        const aiTaskContainer = document.getElementById('ai-task-container');
+        const hobbyTags = document.querySelectorAll('.hobby-tag');
+        const notification = document.getElementById('notification');
+        const errorMessage = document.getElementById('error-message');
+        
+        // Initialize the app
+        function initApp() {
+            renderTasks();
+            renderCollection();
+            updateStats();
+            setupEventListeners();
+        }
+        
+        // Render tasks
+        function renderTasks() {
+            taskList.innerHTML = '';
+            
+            if (state.tasks.length === 0) {
+                taskList.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-hat-wizard"></i>
+                        <h3>Your Quest Log is Empty</h3>
+                        <p>Add your first quest or generate one below to begin your magical journey!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            state.tasks.forEach(task => {
+                const taskItem = document.createElement('li');
+                taskItem.className = `task-item ${task.completed ? 'completed' : ''}`;
+                taskItem.dataset.id = task.id;
+                
+                taskItem.innerHTML = `
+                    <div class="task-checkbox ${task.completed ? 'checked' : ''}"></div>
+                    <div class="task-text">
+                        ${task.text}
+                        <span class="category-tag tag-${task.category}">${task.category}</span>
+                    </div>
+                    <div class="magic-reward">+${task.magic} MP</div>
+                `;
+                
+                taskList.appendChild(taskItem);
+            });
+        }
+        
+        // Render collection
+        function renderCollection() {
+            collectionGrid.innerHTML = '';
+            
+            state.collection.forEach(item => {
+                const collectionItem = document.createElement('div');
+                collectionItem.className = `collection-item ${item.unlocked ? 'unlocked' : 'locked'}`;
+                
+                collectionItem.innerHTML = `
+                    <div class="collection-icon">
+                        <i class="fas ${item.icon}"></i>
+                    </div>
+                    <div class="collection-name">${item.name}</div>
+                    <div class="collection-level">Level ${item.level}</div>
+                    <div class="collection-description">${item.description}</div>
+                    ${!item.unlocked ? '<div class="locked-overlay"><i class="fas fa-lock"></i></div>' : ''}
+                `;
+                
+                collectionGrid.appendChild(collectionItem);
+            });
+        }
+        
+        // Update stats
+        function updateStats() {
+            levelElement.textContent = state.level;
+            magicPointsElement.textContent = state.magicPoints;
+            
+            // Calculate unlocked items count
+            const unlockedItems = state.collection.filter(item => item.unlocked).length;
+            itemsCountElement.textContent = unlockedItems;
+            
+            // Calculate progress to next level
+            const progressPercentage = Math.min(100, (state.magicPoints / state.nextLevel) * 100);
+            levelProgress.style.width = `${progressPercentage}%`;
+        }
+        
+        // Add task
+        function addTask(text, category = "learning") {
+            if (text.trim() === '') {
+                showError("Please enter a quest before adding");
+                return;
+            }
+            
+            // Check for duplicate task
+            const isDuplicate = state.tasks.some(task => 
+                task.text.toLowerCase() === text.toLowerCase()
+            );
+            
+            if (isDuplicate) {
+                showError("Quest already exists in your log!");
+                return;
+            }
+            
+            hideError();
+            
+            const magic = Math.floor(Math.random() * 15) + 10; // Random MP between 10-25
+            
+            const newTask = {
+                id: Date.now(),
+                text: text,
+                completed: false,
+                magic: magic,
+                category: category
+            };
+            
+            state.tasks.unshift(newTask);
+            renderTasks();
+            taskInput.value = '';
+        }
+        
+        // Show error message
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            
+            // Add animation
+            errorMessage.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                errorMessage.style.animation = '';
+            }, 500);
+        }
+        
+        // Hide error message
+        function hideError() {
+            errorMessage.style.display = 'none';
+        }
+        
+        // Complete task with animation
+        function completeTask(taskId) {
+            const task = state.tasks.find(t => t.id == taskId);
+            if (!task || task.completed) return;
+            
+            task.completed = true;
+            state.magicPoints += task.magic;
+            
+            // Find task element
+            const taskElement = document.querySelector(`.task-item[data-id="${taskId}"]`);
+            if (!taskElement) return;
+            
+            // Trigger removal animation
+            taskElement.classList.add('removing');
+            
+            // Create particle effect
+            createParticleEffect(taskElement);
+            
+            // Check for level up
+            let unlockedNewItem = false;
+            if (state.magicPoints >= state.nextLevel) {
+                state.level++;
+                state.nextLevel = state.level * 100;
+                
+                // Unlock any items at this level
+                state.collection.forEach(item => {
+                    if (item.level === state.level && !item.unlocked) {
+                        item.unlocked = true;
+                        unlockedNewItem = true;
+                    }
+                });
+            }
+            
+            // Update stats immediately
+            updateStats();
+            
+            // If unlocked new item, show notification and render collection
+            if (unlockedNewItem) {
+                showNotification("New artifact unlocked! Check your collection.");
+                setTimeout(() => {
+                    renderCollection();
+                }, 500);
+            }
+            
+            // Remove task after animation completes
+            taskElement.addEventListener('animationend', () => {
+                const taskIndex = state.tasks.findIndex(t => t.id == taskId);
+                if (taskIndex !== -1) {
+                    state.tasks.splice(taskIndex, 1);
+                }
+                renderTasks();
+            });
+        }
+        
+        // Create particle effect for task completion
+        function createParticleEffect(element) {
+            const rect = element.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            // Create particles
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = `${Math.random() * 6 + 2}px`;
+                particle.style.height = particle.style.width;
+                particle.style.left = `${centerX}px`;
+                particle.style.top = `${centerY}px`;
+                
+                // Set color based on category
+                const category = state.tasks.find(t => t.id == element.dataset.id)?.category;
+                switch(category) {
+                    case "sports":
+                        particle.style.backgroundColor = "#4CAF50";
+                        break;
+                    case "reading":
+                        particle.style.backgroundColor = "#2196F3";
+                        break;
+                    case "gaming":
+                        particle.style.backgroundColor = "#9C27B0";
+                        break;
+                    case "cooking":
+                        particle.style.backgroundColor = "#FF9800";
+                        break;
+                    case "learning":
+                        particle.style.backgroundColor = "#FF5722";
+                        break;
+                    default:
+                        particle.style.backgroundColor = "#64ffda";
+                }
+                
+                particle.style.opacity = Math.random() * 0.8 + 0.2;
+                
+                const angle = Math.random() * Math.PI * 2;
+                const distance = Math.random() * 80 + 40;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                particle.style.setProperty('--tx', `${tx}px`);
+                particle.style.setProperty('--ty', `${ty}px`);
+                
+                document.body.appendChild(particle);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    particle.remove();
+                }, 1200);
+            }
+        }
+        
+        // Show notification
+        function showNotification(message) {
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Generate AI task with duplicate prevention
+        function generateAITask() {
+            const tasks = {
+                sports: [
+                    "Go for a 30-minute run",
+                    "Do 30 minutes of yoga",
+                    "Play basketball with friends",
+                    "Take a long bike ride",
+                    "Try a new workout routine"
+                ],
+                reading: [
+                    "Read a chapter of your current book",
+                    "Visit the library and find a new book",
+                    "Read an article about a topic you're interested in",
+                    "Join a book club discussion",
+                    "Read for 30 minutes before bed"
+                ],
+                gaming: [
+                    "Play your favorite game for an hour",
+                    "Try a new video game",
+                    "Challenge a friend to a game",
+                    "Achieve a specific in-game goal",
+                    "Explore a new game world"
+                ],
+                cooking: [
+                    "Cook a meal from a new recipe",
+                    "Bake your favorite dessert",
+                    "Try cooking a cuisine you've never made before",
+                    "Prepare a healthy meal plan for the week",
+                    "Cook with a friend or family member"
+                ],
+                learning: [
+                    "Learn 5 phrases in a new language",
+                    "Take an online course for 30 minutes",
+                    "Watch an educational documentary",
+                    "Research a topic you're curious about",
+                    "Practice a musical instrument for 30 minutes"
+                ]
+            };
+            
+            // Select a random task from the selected hobby
+            const hobbyTasks = tasks[state.selectedHobby];
+            let randomTask;
+            let attempts = 0;
+            const maxAttempts = 10;
+            
+            do {
+                randomTask = hobbyTasks[Math.floor(Math.random() * hobbyTasks.length)];
+                attempts++;
+                
+                // Check if task exists in current tasks
+                const taskExists = state.tasks.some(task => 
+                    task.text.toLowerCase() === randomTask.toLowerCase()
+                );
+                
+                // Check if task has been recently generated
+                const recentlyGenerated = state.generatedTasks.includes(randomTask);
+                
+                if (!taskExists && !recentlyGenerated) break;
+                
+                if (attempts >= maxAttempts) {
+                    // Reset generated tasks history if too many attempts
+                    state.generatedTasks = [];
+                    break;
+                }
+            } while (true);
+            
+            // Store the generated task to avoid repetition
+            state.generatedTasks.push(randomTask);
+            
+            // Keep only the last 5 generated tasks
+            if (state.generatedTasks.length > 5) {
+                state.generatedTasks.shift();
+            }
+            
+            aiTaskContainer.innerHTML = `
+                <div class="ai-task">
+                    <div>${randomTask}</div>
+                    <button class="add-ai-task" onclick="addTask('${randomTask}', '${state.selectedHobby}')">
+                        Add to Quests
+                    </button>
+                </div>
+            `;
+        }
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Add task
+            addBtn.addEventListener('click', () => {
+                addTask(taskInput.value);
+            });
+            
+            taskInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    addTask(taskInput.value);
+                }
+            });
+            
+            // Complete task
+            taskList.addEventListener('click', (e) => {
+                const taskItem = e.target.closest('.task-item');
+                if (!taskItem) return;
+                
+                const checkbox = taskItem.querySelector('.task-checkbox');
+                if (e.target === checkbox || checkbox.contains(e.target)) {
+                    completeTask(taskItem.dataset.id);
+                }
+            });
+            
+            // Generate task
+            generateBtn.addEventListener('click', generateAITask);
+            
+            // Select hobby
+            hobbyTags.forEach(tag => {
+                tag.addEventListener('click', () => {
+                    hobbyTags.forEach(t => t.classList.remove('active'));
+                    tag.classList.add('active');
+                    state.selectedHobby = tag.dataset.hobby;
+                });
+            });
+        }
+        
+        // Initialize the app
+        window.onload = initApp;
+        
+        // Make addTask available globally for AI task button
+        window.addTask = addTask;
+    </script>
+</body>
+</html>
