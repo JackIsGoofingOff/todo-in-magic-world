@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Magic Quest | Mobile Task RPG</title>
+    <title>魔法高校の優等生</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* style.css */
@@ -273,6 +273,15 @@
         
         .task-list {
             list-style: none;
+            /* Added scroll functionality */
+            max-height: 230px; /* Height for about 3 tasks */
+            overflow-y: auto;
+        }
+        
+        .task-list:not(:has(.task-item)) {
+            /* Remove scroll when empty state is shown */
+            max-height: none;
+            overflow-y: visible;
         }
         
         .task-item {
@@ -619,6 +628,12 @@
             font-size: 0.9rem;
         }
         
+        .notification.error {
+            border-color: var(--error);
+            color: var(--error);
+            background: rgba(255, 85, 85, 0.2);
+        }
+        
         .notification.show {
             transform: translateY(0);
         }
@@ -757,7 +772,7 @@
         <header>
             <div class="header-bg"></div>
             <div class="header-content">
-                <h1>MAGIC QUEST</h1>
+                <h1>魔法高校の優等生</h1>
                 <p class="subtitle">Transform daily activities into magical achievements</p>
                 <div class="user-stats">
                     <div class="stat-card">
@@ -786,7 +801,6 @@
                     <input type="text" class="task-input" id="task-input" placeholder="Add a new quest...">
                     <button class="add-btn" id="add-btn">ADD</button>
                 </div>
-                <div class="error-message" id="error-message">Please enter a quest before adding</div>
             </div>
             <ul class="task-list" id="task-list">
                 <div class="empty-state">
@@ -869,7 +883,6 @@
         const aiTaskContainer = document.getElementById('ai-task-container');
         const hobbyTags = document.querySelectorAll('.hobby-tag');
         const notification = document.getElementById('notification');
-        const errorMessage = document.getElementById('error-message');
         
         // Initialize the app
         function initApp() {
@@ -951,7 +964,7 @@
         // Add task
         function addTask(text, category = "learning") {
             if (text.trim() === '') {
-                showError("Please enter a quest before adding");
+                showErrorNotification("Please enter a quest before adding");
                 return;
             }
             
@@ -961,11 +974,9 @@
             );
             
             if (isDuplicate) {
-                showError("Quest already exists in your log!");
+                showErrorNotification("Quest already exists in your log!");
                 return;
             }
-            
-            hideError();
             
             const magic = Math.floor(Math.random() * 15) + 10; // Random MP between 10-25
             
@@ -982,21 +993,14 @@
             taskInput.value = '';
         }
         
-        // Show error message
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
+        // Show error notification
+        function showErrorNotification(message) {
+            notification.textContent = message;
+            notification.classList.add('show', 'error');
             
-            // Add animation
-            errorMessage.style.animation = 'shake 0.5s';
             setTimeout(() => {
-                errorMessage.style.animation = '';
-            }, 500);
-        }
-        
-        // Hide error message
-        function hideError() {
-            errorMessage.style.display = 'none';
+                notification.classList.remove('show');
+            }, 3000);
         }
         
         // Complete task with animation
@@ -1112,6 +1116,7 @@
         // Show notification
         function showNotification(message) {
             notification.textContent = message;
+            notification.classList.remove('error');
             notification.classList.add('show');
             
             setTimeout(() => {
